@@ -62,7 +62,7 @@ uint16_t patternSpeed;
 
 // this function creates a bus of leds
 //   Using BusOut inside an isr crashes mbed-os
-uint8_t leds_value;
+uint8_t leds_data;
 void set_leds(uint8_t data) {
     ledRed1    = data & 0x01;
     ledOrange1 = (data >> 1) & 0x01;
@@ -70,8 +70,8 @@ void set_leds(uint8_t data) {
     ledGreen2  = (data >> 3) & 0x01;
     ledOrange2 = (data >> 4) & 0x01;
     ledRed2    = (data >> 5) & 0x01;
-    // set leds_value to current setting
-    leds_value = data;
+    // set leds_data to current setting
+    leds_data = data;
 }
 
 
@@ -82,7 +82,7 @@ void pattern_next() {
         // pattern: blink all
         patternStep = 0;
         // invert leds
-        set_leds(~leds_value);
+        set_leds(~leds_data);
     } else if(patternNum == 1) {
         // pattern: dot
         // check if step at the end of pattern
@@ -108,7 +108,7 @@ void pattern_next() {
 
 int main() {    
     // Initialise global vars
-    leds_value = 0;
+    leds_data = 0;
     patternDir = 0;
     patternNum = 0;
     patternStep = 0;
