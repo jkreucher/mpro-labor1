@@ -61,7 +61,7 @@ uint16_t patternSpeed;
 
 
 // this function creates a bus of leds
-//   Using BusOut crashes mbed-os when changing inside an isr
+//   Using BusOut inside an isr crashes mbed-os
 uint8_t leds_value;
 void set_leds(uint8_t data) {
     ledRed1    = data & 0x01;
@@ -144,7 +144,7 @@ int main() {
             }
         }
         // check fast speed button and if fast speed already set
-        // if so dont change speed to fast again
+        // if so dont change speed again
         else if((buttonFast.read() == 1) && (patternSpeed != 50)) {
             // debounce delay
             ThisThread::sleep_for(DEBOUNCE_DELAY);
@@ -157,7 +157,7 @@ int main() {
             }
         }
         // check slow speed button and if slow speed already set
-        // if so dont change speed to slow again
+        // if so dont change speed again
         else if((buttonSlow.read() == 1) && (patternSpeed != 2000)) {
             // debounce delay
             ThisThread::sleep_for(DEBOUNCE_DELAY);
