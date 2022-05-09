@@ -49,9 +49,9 @@
             ".text": 1236,
             ".data": 0,
             ".bss": 378,
-            ".text-delta": 30,
+            ".text-delta": 0,
             ".data-delta": 0,
-            ".bss-delta": 1
+            ".bss-delta": 0
         }
     },
     {
@@ -134,9 +134,9 @@
     {
         "summary": {
             "static_ram": 9732,
-            "static_ram_delta": 1,
+            "static_ram_delta": 0,
             "total_flash": 34554,
-            "total_flash_delta": 30
+            "total_flash_delta": 0
         }
     }
 ]

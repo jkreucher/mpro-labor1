@@ -1,9 +1,4 @@
-#include "DigitalOut.h"
-#include "ThisThread.h"
 #include "mbed.h"
-#include "stm32f4xx_ll_tim.h"
-#include <chrono>
-#include <cstdint>
 
 
 /*** PIN DEFINITIONS ***/
@@ -23,7 +18,8 @@
 #define SW_4    PA_7
 #define SW_5    PA_6
 
-#define DEBOUNCE_DELAY  20ms
+#define DEBOUNCE_DELAY  50ms
+
 
 // led bus define
 // BusOut will not work with ticker isr
@@ -36,13 +32,14 @@ DigitalOut ledOrange2(LED_ORANGE2);
 DigitalOut ledGreen2(LED_GREEN2);
 // button inputs
 DigitalIn buttonDir(SW_1);
-DigitalIn buttonDot(SW_4);
-DigitalIn buttonBar(SW_5);
-DigitalIn buttonFast(SW_2);
-DigitalIn buttonSlow(SW_3);
+DigitalIn buttonDot(SW_2);
+DigitalIn buttonBar(SW_3);
+DigitalIn buttonFast(SW_4);
+DigitalIn buttonSlow(SW_5);
 
 // timer for interrupt
 Ticker patternTicker;
+
 
 // led patterns
 const uint8_t patternDot[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20};
