@@ -26,6 +26,7 @@
 #define DEBOUNCE_DELAY  20ms
 
 // led bus define
+// BusOut will not work with ticker isr
 //BusOut busLeds(LED_RED1, LED_ORANGE1, LED_GREEN1, LED_GREEN2, LED_ORANGE2, LED_RED2);
 DigitalOut ledRed1(LED_RED1);
 DigitalOut ledOrange1(LED_ORANGE1);
@@ -40,7 +41,7 @@ DigitalIn buttonBar(SW_5);
 DigitalIn buttonFast(SW_2);
 DigitalIn buttonSlow(SW_3);
 
-// timer
+// timer for interrupt
 Ticker patternTicker;
 
 // led patterns
@@ -55,7 +56,8 @@ uint16_t patternSpeed;
 
 
 // this function creates a bus of leds
-//   Using BusOut crashes mbed-os when using inside in isr
+//   Using BusOut crashes mbed-os when changing inside an isr
+uint8_t leds_value;
 void set_leds(uint8_t data) {
     ledRed1    = data & 0x01;
     ledOrange1 = (data >> 1) & 0x01;
@@ -63,6 +65,8 @@ void set_leds(uint8_t data) {
     ledGreen2  = (data >> 3) & 0x01;
     ledOrange2 = (data >> 4) & 0x01;
     ledRed2    = (data >> 5) & 0x01;
+    // set leds_value to current setting
+    leds_value = data;
 }
 
 
@@ -72,7 +76,8 @@ void pattern_next() {
     if(patternNum == 0) {
         // pattern: blink all
         patternStep = 0;
-        set_leds(0xFF);
+        // invert leds
+        set_leds(~leds_value);
     } else if(patternNum == 1) {
         // pattern: dot
         // check if step at the end of pattern
@@ -98,8 +103,9 @@ void pattern_next() {
 
 int main() {    
     // Initialise global vars
+    leds_value = 0;
     patternDir = 0;
-    patternNum = 1;
+    patternNum = 0;
     patternStep = 0;
     patternSpeed = 300;
 
@@ -111,7 +117,7 @@ int main() {
         // set direction by slide switch
         patternDir = buttonDir.read();
 
-        // check pattern button
+        // check dot pattern button
         if(buttonDot.read() == 1) {
             // debounce delay
             ThisThread::sleep_for(DEBOUNCE_DELAY);
@@ -122,6 +128,7 @@ int main() {
                 patternNum = 1;
             }
         }
+        // check bar pattern button
         else if(buttonBar.read() == 1) {
             // debounce delay
             ThisThread::sleep_for(DEBOUNCE_DELAY);
@@ -131,6 +138,8 @@ int main() {
                 patternNum = 2;
             }
         }
+        // check fast speed button and if fast speed already set
+        // if so dont change speed to fast again
         else if((buttonFast.read() == 1) && (patternSpeed != 50)) {
             // debounce delay
             ThisThread::sleep_for(DEBOUNCE_DELAY);
@@ -142,6 +151,8 @@ int main() {
                 patternTicker.attach(&pattern_next, chrono::milliseconds(patternSpeed));
             }
         }
+        // check slow speed button and if slow speed already set
+        // if so dont change speed to slow again
         else if((buttonSlow.read() == 1) && (patternSpeed != 2000)) {
             // debounce delay
             ThisThread::sleep_for(DEBOUNCE_DELAY);

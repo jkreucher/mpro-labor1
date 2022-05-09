@@ -46,12 +46,12 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 1206,
+            ".text": 1236,
             ".data": 0,
-            ".bss": 377,
-            ".text-delta": 82,
+            ".bss": 378,
+            ".text-delta": 30,
             ".data-delta": 0,
-            ".bss-delta": 0
+            ".bss-delta": 1
         }
     },
     {
@@ -133,10 +133,10 @@
     },
     {
         "summary": {
-            "static_ram": 9731,
-            "static_ram_delta": 0,
-            "total_flash": 34524,
-            "total_flash_delta": 82
+            "static_ram": 9732,
+            "static_ram_delta": 1,
+            "total_flash": 34554,
+            "total_flash_delta": 30
         }
     }
 ]
