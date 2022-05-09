@@ -1,3 +1,11 @@
+/* AUFGABE:  MPRO Laboraufgabe 1
+ *
+ * DATUM:    09.05.2022
+ *
+ * AUTOREN:  Jannik Kreucher
+ *           Benedikt Wendling
+ *           Nick Diendorf
+ */
 #include "mbed.h"
 
 
