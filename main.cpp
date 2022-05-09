@@ -1,6 +1,7 @@
 #include "DigitalOut.h"
 #include "ThisThread.h"
 #include "mbed.h"
+#include "stm32f4xx_ll_tim.h"
 #include <chrono>
 #include <cstdint>
 
@@ -22,6 +23,7 @@
 #define SW_4    PA_7
 #define SW_5    PA_6
 
+#define DEBOUNCE_DELAY  20ms
 
 // led bus define
 //BusOut busLeds(LED_RED1, LED_ORANGE1, LED_GREEN1, LED_GREEN2, LED_ORANGE2, LED_RED2);
@@ -108,24 +110,51 @@ int main() {
     while (true) {
         // set direction by slide switch
         patternDir = buttonDir.read();
+
         // check pattern button
         if(buttonDot.read() == 1) {
-            patternNum = 1;
+            // debounce delay
+            ThisThread::sleep_for(DEBOUNCE_DELAY);
+            // check second button
+            if(buttonBar.read() == 0) {
+                // bar button is not pressed
+                // change pattern to 1st pattern
+                patternNum = 1;
+            }
         }
-        if(buttonBar.read() == 1) {
-            patternNum = 2;
+        else if(buttonBar.read() == 1) {
+            // debounce delay
+            ThisThread::sleep_for(DEBOUNCE_DELAY);
+            // check dot button
+            if(buttonDot.read() == 0) {
+                // dot button not pressed
+                patternNum = 2;
+            }
         }
-        if((buttonFast.read() == 1) && (patternSpeed != 50)) {
-            patternSpeed = 50;
-            // update timer speed
-            patternTicker.attach(&pattern_next, chrono::milliseconds(patternSpeed));
+        else if((buttonFast.read() == 1) && (patternSpeed != 50)) {
+            // debounce delay
+            ThisThread::sleep_for(DEBOUNCE_DELAY);
+            // check slow button
+            if(buttonSlow.read() == 0) {
+                // slow button not pressed
+                patternSpeed = 50;
+                // update timer speed
+                patternTicker.attach(&pattern_next, chrono::milliseconds(patternSpeed));
+            }
         }
-        if((buttonSlow.read() == 1) && (patternSpeed != 2000)) {
-            patternSpeed = 2000;
-            // update timer speed
-            patternTicker.attach(&pattern_next, chrono::milliseconds(patternSpeed));
+        else if((buttonSlow.read() == 1) && (patternSpeed != 2000)) {
+            // debounce delay
+            ThisThread::sleep_for(DEBOUNCE_DELAY);
+            // check fast button
+            if(buttonFast.read() == 0) {
+                // fast button not pressed
+                patternSpeed = 2000;
+                // update timer speed
+                patternTicker.attach(&pattern_next, chrono::milliseconds(patternSpeed));
+            }
         }
+
         // debounce delay
-        ThisThread::sleep_for(10ms);
+        ThisThread::sleep_for(DEBOUNCE_DELAY);
     }
 }
