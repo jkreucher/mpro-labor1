@@ -1,4 +1,6 @@
+.circleci
 .build
+BUILD
 .mbed
 projectfiles
 *.py*
