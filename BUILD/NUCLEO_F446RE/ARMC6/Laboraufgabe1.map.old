@@ -39,7 +39,7 @@ Adding cpp init reference.              reference :  __cpp_initialize__aeabi_
               definition:  ledOrange2
               definition:  ledRed1
               definition:  ledRed2
-              definition:  leds_value
+              definition:  leds_data
               definition:  main
               definition:  patternDir
               definition:  patternNum
@@ -32092,7 +32092,7 @@ Memory Map of the image
     0x200017c4   0x0000001c   Zero   RW           44    .bss.ledOrange2     BUILD/NUCLEO_F446RE/ARMC6/main.o
     0x200017e0   0x0000001c   Zero   RW           40    .bss.ledRed1        BUILD/NUCLEO_F446RE/ARMC6/main.o
     0x200017fc   0x0000001c   Zero   RW           43    .bss.ledRed2        BUILD/NUCLEO_F446RE/ARMC6/main.o
-    0x20001818   0x00000001   Zero   RW           56    .bss.leds_value     BUILD/NUCLEO_F446RE/ARMC6/main.o
+    0x20001818   0x00000001   Zero   RW           56    .bss.leds_data      BUILD/NUCLEO_F446RE/ARMC6/main.o
     0x20001819   0x00000001   Zero   RW        31759    .bss.mbed_error_in_progress  BUILD/NUCLEO_F446RE/ARMC6/mbed-os/platform/source/mbed_error.o
     0x2000181a   0x00000002   PAD
     0x2000181c   0x00000054   Zero   RW        31529    .bss.mbed_fault_context  BUILD/NUCLEO_F446RE/ARMC6/mbed-os/platform/source/TARGET_CORTEX_M/mbed_fault_handler.o
@@ -32152,7 +32152,7 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     27772       2182       2676        244     130004    1369751   Object Totals
+     27772       2182       2676        244     130004    1369755   Object Totals
          0          0         32          0     121872          0   (incl. Generated)
        422          0          4          0         32          0   (incl. Padding)
       4292        262          0         16        348       4364   Library Totals
@@ -32163,8 +32163,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     32064       2444       2676        260     130352    1370219   Grand Totals
-     32064       2444       2676        260     130352    1370219   ELF Image Totals
+     32064       2444       2676        260     130352    1370223   Grand Totals
+     32064       2444       2676        260     130352    1370223   ELF Image Totals
      32064       2444       2676        260          0          0   ROM Totals
 
 ==============================================================================

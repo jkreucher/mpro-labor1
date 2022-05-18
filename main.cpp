@@ -7,6 +7,7 @@
  *           Nick Diendorf
  */
 #include "mbed.h"
+#include <cstdint>
 
 
 /*** PIN DEFINITIONS ***/
@@ -30,8 +31,7 @@
 
 
 // led bus define
-// BusOut will not work with ticker isr
-//BusOut busLeds(LED_RED1, LED_ORANGE1, LED_GREEN1, LED_GREEN2, LED_ORANGE2, LED_RED2);
+BusOut busLeds(LED_RED1, LED_ORANGE1, LED_GREEN1, LED_GREEN2, LED_ORANGE2, LED_RED2);
 DigitalOut ledRed1(LED_RED1);
 DigitalOut ledOrange1(LED_ORANGE1);
 DigitalOut ledGreen1(LED_GREEN1);
@@ -46,7 +46,7 @@ DigitalIn buttonFast(SW_4);
 DigitalIn buttonSlow(SW_5);
 
 // timer for interrupt
-Ticker patternTicker;
+Timer patternTimer;
 
 
 // led patterns
@@ -60,21 +60,6 @@ int8_t patternStep;     // pattern index variable
 uint16_t patternSpeed;
 
 
-// this function creates a bus of leds
-//   Using BusOut inside an isr crashes mbed-os
-uint8_t leds_data;
-void set_leds(uint8_t data) {
-    ledRed1    = data & 0x01;
-    ledOrange1 = (data >> 1) & 0x01;
-    ledGreen1  = (data >> 2) & 0x01;
-    ledGreen2  = (data >> 3) & 0x01;
-    ledOrange2 = (data >> 4) & 0x01;
-    ledRed2    = (data >> 5) & 0x01;
-    // set leds_data to current setting
-    leds_data = data;
-}
-
-
 // this function advances to the next index in a pattern and displays it
 void pattern_next() {
     // check which pattern to show
@@ -82,21 +67,21 @@ void pattern_next() {
         // pattern: blink all
         patternStep = 0;
         // invert leds
-        set_leds(~leds_data);
+        busLeds = ~busLeds;
     } else if(patternNum == 1) {
         // pattern: dot
         // check if step at the end of pattern
         if(patternStep < 0) patternStep = sizeof(patternDot) - 1;
         if(patternStep >= sizeof(patternDot)) patternStep = 0;
         // set leds to pattern index
-        set_leds(patternDot[patternStep]);
+        busLeds = patternDot[patternStep];
     } else if(patternNum == 2) {
         // pattern: bar
         // check if step at the end of pattern
         if(patternStep < 0) patternStep = sizeof(patternBar) - 1;
         if(patternStep >= sizeof(patternBar)) patternStep = 0;
         // set leds to pattern index
-        set_leds(patternBar[patternStep]);
+        busLeds = patternBar[patternStep];
     }
     // next step
     if(patternDir)
@@ -108,14 +93,13 @@ void pattern_next() {
 
 int main() {    
     // Initialise global vars
-    leds_data = 0;
     patternDir = 0;
     patternNum = 0;
     patternStep = 0;
     patternSpeed = 300;
 
     // start timer
-    patternTicker.attach(&pattern_next, chrono::milliseconds(patternSpeed));
+    patternTimer.start();
 
     // main loop
     while (true) {
@@ -152,8 +136,6 @@ int main() {
             if(buttonSlow.read() == 0) {
                 // slow button not pressed
                 patternSpeed = 50;
-                // update timer speed
-                patternTicker.attach(&pattern_next, chrono::milliseconds(patternSpeed));
             }
         }
         // check slow speed button and if slow speed already set
@@ -165,9 +147,13 @@ int main() {
             if(buttonFast.read() == 0) {
                 // fast button not pressed
                 patternSpeed = 2000;
-                // update timer speed
-                patternTicker.attach(&pattern_next, chrono::milliseconds(patternSpeed));
             }
+        }
+
+        // check if time has come
+        if(patternTimer.elapsed_time() >= chrono::milliseconds(patternSpeed)) {
+            pattern_next();
+            patternTimer.reset();
         }
 
         // debounce delay
