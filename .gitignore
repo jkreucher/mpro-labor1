@@ -1,7 +1,7 @@
 .circleci
 .build
-BUILD
+BUILD/
 .mbed
-mbed-os
+mbed-os/
 projectfiles
 *.py*
