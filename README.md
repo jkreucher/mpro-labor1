@@ -1,2 +1,0 @@
-# MPRO Laboraufgabe 1
-
