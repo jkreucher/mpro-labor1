@@ -1,5 +1,7 @@
 # Labor 1: LED‐Ansteuerung
 
+MPRO Labor bei Prof. Dr.‐Ing. Jens Altenburg an der TH-Bingen
+
 ## Zielstellung:
 In der Laborvorlesung zur Einführung in den Aufbau der Laborhardware sind die grundsätzlichen Zusammenhänge zwischen Eingabegeräten (Schalter/Taster) und einfachen Digitalsignalen (LED on/off) erläutert worden. Im dazugehörigen Laborversuch werden diese Zusammenhänge vertieft und praktisch angewandt. Die einfachsten APIs zur Nutzung von digitalen GPIOs sind DigitalIn und DigitalOut. Werden mehrere digitale Signale gemeinsam angesteuert ist die Verwendung der API BusOut oft hilfreich.
 
