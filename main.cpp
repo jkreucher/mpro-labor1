@@ -32,12 +32,6 @@
 
 // led bus define
 BusOut busLeds(LED_RED1, LED_ORANGE1, LED_GREEN1, LED_GREEN2, LED_ORANGE2, LED_RED2);
-DigitalOut ledRed1(LED_RED1);
-DigitalOut ledOrange1(LED_ORANGE1);
-DigitalOut ledGreen1(LED_GREEN1);
-DigitalOut ledRed2(LED_RED2);
-DigitalOut ledOrange2(LED_ORANGE2);
-DigitalOut ledGreen2(LED_GREEN2);
 // button inputs
 DigitalIn buttonDir(SW_1);
 DigitalIn buttonDot(SW_2);
@@ -45,7 +39,7 @@ DigitalIn buttonBar(SW_3);
 DigitalIn buttonFast(SW_4);
 DigitalIn buttonSlow(SW_5);
 
-// timer for interrupt
+// timer to advance pattern
 Timer patternTimer;
 
 
